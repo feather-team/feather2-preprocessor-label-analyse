@@ -83,12 +83,8 @@ module.exports = function(content, file){
 
                 all = refFile.getContent();
 
-                if(refType == 'pagelet'){
-                    all = all.replace(/"##PLACEHOLDER_PAGELET_ASYNCS:\S+?##"/, '[]');
-                
-                    if(pid){
-                        return '<textarea style="display: none" id="' + pid + '">' + all + '</textarea>';
-                    }
+                if(refType == 'pagelet' && pid){
+                    return '<textarea style="display: none" id="' + pid + '">' + all + '</textarea>';
                 }
             }
         }
