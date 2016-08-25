@@ -1,0 +1,23 @@
+{
+  "name": "feather2-preprocessor-label-analyse",
+  "version": "1.0.0",
+  "description": "模板语法标签分析",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/feather-team/feather2-preprocessor-label-analyse.git"
+  },
+  "keywords": [
+    "feather2",
+    "label-analyse"
+  ],
+  "author": "jsyczhanghao@sina.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/feather-team/feather2-preprocessor-label-analyse/issues"
+  },
+  "homepage": "https://github.com/feather-team/feather2-preprocessor-label-analyse#readme"
+}
