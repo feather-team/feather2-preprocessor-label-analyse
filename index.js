@@ -33,6 +33,7 @@ module.exports = function(content, file){
     var matches = content.match(EXTENDS_REG);
 
     content = content.replace(BLOCK_REG, function(all, bid, bContent){
+        bid = feather.util.stringQuote(bid).rest;
         blocks[bid] = bContent;
         return '<!--BLOCK_START#' + bid + '-->' + bContent + '<!--BLOCK_END-->';
     });
@@ -43,11 +44,17 @@ module.exports = function(content, file){
 
         if(info.file && info.file.isFile()){
             var extend = info.file;
-    
-            feather.compile(extend);
+            //使用临时文件存放，防止用户使用了pd模式，导致注释消失
+            var bakFile = feather.file.wrap(feather.project.getProjectPath() + '/_bak_/' + extend.id);
+            bakFile.setContent(extend.getContent());
+            bakFile.optimizer = false;
+        
+            feather.compile(bakFile);
+
             addDeps(file, extend);            
             addRef(file, 'extends', extend.id);
-            content = extend.getContent();
+
+            content = bakFile.getContent();
 
             feather.util.map(blocks, function(name, block){
                 var reg = new RegExp('<!--BLOCK_START#' + name + '-->[\\s\\S]*?<!--BLOCK_END-->', 'g');
