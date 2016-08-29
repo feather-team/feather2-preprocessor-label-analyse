@@ -48,6 +48,7 @@ module.exports = function(content, file){
             var bakFile = feather.file.wrap(feather.project.getProjectPath() + '/_bak_/' + extend.id);
             bakFile.setContent(extend.getContent());
             bakFile.optimizer = false;
+            bakFile.release = false;
         
             feather.compile(bakFile);
 
