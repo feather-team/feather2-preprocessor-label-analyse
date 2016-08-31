@@ -1,6 +1,6 @@
 {
   "name": "feather2-preprocessor-label-analyse",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "模板语法标签分析",
   "main": "index.js",
   "scripts": {
