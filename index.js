@@ -1,10 +1,10 @@
 'use strict';
 
 //var REG = /<!--(?:(?!\[if [^\]]+\]>)[\s\S])*?-->|<%\s*(widget|extend|pagelet)\(\s*['"]([^'"]+)['"]\s*\)\s*%>|<%\s*block\(\s*['"]([^'"]+)['"](?:\s*,\s*((?:(?!\s*%>)[\s\S])+))?\s*\)\s*%>(?:((?:(?!<%)[\s\S])*)(?:<%\s*(\/block|endblock)\s*%>)|$)?/g;
+var Path = require('path');
 var EXTENDS_REG = /<extends\s+(\S+)\s*\/?>/;
 var REF_REG = /<!--(?:(?!\[if [^\]]+\]>)[\s\S])*?-->|<(widget|pagelet)\s+(\S+)\s*\/?>/g;
 var BLOCK_REG = /<block\s+(\S+)\s*>([\s\S]*?)<\/block>/g;
-var Path = require('path');
 
 function getId(id){
     var SUFFIX = '.' + feather.config.get('template.suffix'), SUFFIX_REG = new RegExp('\\' + SUFFIX + '$');
@@ -30,6 +30,8 @@ function addDeps(a, b){
 }
 
 module.exports = function(content, file){    
+    if(!file.isHtmlLike) return content;
+
     var blocks = {};
     var matches = content.match(EXTENDS_REG);
 
@@ -51,13 +53,12 @@ module.exports = function(content, file){
         if(info.file && info.file.isFile()){
             var extend = info.file;
             //使用临时文件存放，防止用户使用了pd模式，导致注释消失
-            var bakFile = feather.file.wrap(feather.project.getProjectPath() + '/_bak_/' + extend.id);
+            var bakFile = feather.file.wrap(feather.project.getProjectPath() + '/_bak_' + extend.id);
             bakFile.setContent(extend.getContent());
             bakFile.optimizer = false;
             bakFile.release = false;
-        
+  
             feather.compile(bakFile);
-
             addDeps(file, extend);            
             addRef(file, 'extends', extend.id);
 
@@ -78,10 +79,10 @@ module.exports = function(content, file){
 
             if(id[0] == '.'){
                 id = Path.join(Path.dirname(file.id), id);
+            }else{
+                id = refType + '/' + id;
             }
 
-            id = refType + '/' + id;
-            
             if(refType == 'pagelet'){
                 id = id.split('#');
 
