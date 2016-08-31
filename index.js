@@ -4,6 +4,7 @@
 var EXTENDS_REG = /<extends\s+(\S+)\s*\/?>/;
 var REF_REG = /<!--(?:(?!\[if [^\]]+\]>)[\s\S])*?-->|<(widget|pagelet)\s+(\S+)\s*\/?>/g;
 var BLOCK_REG = /<block\s+(\S+)\s*>([\s\S]*?)<\/block>/g;
+var Path = require('path');
 
 function getId(id){
     var SUFFIX = '.' + feather.config.get('template.suffix'), SUFFIX_REG = new RegExp('\\' + SUFFIX + '$');
@@ -40,7 +41,12 @@ module.exports = function(content, file){
     
     if(matches){
         var id = getId(feather.util.stringQuote(matches[1]).rest);
-        var info = feather.project.lookup(id, file);
+
+        if(id[0] == '.'){
+            id = Path.join(Path.dirname(file.id), id);
+        }
+        
+        var info = feather.project.lookup(id);
 
         if(info.file && info.file.isFile()){
             var extend = info.file;
@@ -68,8 +74,14 @@ module.exports = function(content, file){
         if(refType){
             var pid;
 
-            id = refType + '/' + feather.util.stringQuote(id).rest;
+            id = feather.util.stringQuote(id).rest;
 
+            if(id[0] == '.'){
+                id = Path.join(Path.dirname(file.id), id);
+            }
+
+            id = refType + '/' + id;
+            
             if(refType == 'pagelet'){
                 id = id.split('#');
 
@@ -80,7 +92,7 @@ module.exports = function(content, file){
                 id = id[0];
             }
 
-            var info = feather.project.lookup(getId(id), file);
+            var info = feather.project.lookup(getId(id));
 
             if(info.file && info.file.isFile()){
                 var refFile = info.file;
