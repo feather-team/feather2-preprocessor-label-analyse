@@ -32,6 +32,7 @@ function addDeps(a, b){
 module.exports = function(content, file){    
     if(!file.isHtmlLike) return content;
 
+
     var blocks = {};
     var matches = content.match(EXTENDS_REG);
 
@@ -45,7 +46,7 @@ module.exports = function(content, file){
         var id = getId(feather.util.stringQuote(matches[1]).rest);
 
         if(id[0] == '.'){
-            id = Path.join(Path.dirname(file.id), id);
+            id = Path.join(Path.dirname(file.subpath), id);
         }
         
         var info = feather.project.lookup(id);
@@ -78,7 +79,7 @@ module.exports = function(content, file){
             id = feather.util.stringQuote(id).rest;
 
             if(id[0] == '.'){
-                id = Path.join(Path.dirname(file.id), id);
+                id = Path.join(Path.dirname(file.subpath), id);
             }else{
                 id = refType + '/' + id;
             }
