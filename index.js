@@ -7,8 +7,8 @@ var REF_REG = /<!--(?:(?!\[if [^\]]+\]>)[\s\S])*?-->|<(widget|pagelet)\s+(\S+)\s
 var BLOCK_REG = /<block\s+(\S+)\s*>([\s\S]*?)<\/block>/g;
 
 function getId(id){
-    var SUFFIX = '.' + feather.config.get('template.suffix'), SUFFIX_REG = new RegExp('\\' + SUFFIX + '$');
-    return id.replace(SUFFIX_REG, '') + SUFFIX;
+    var SUFFIX = '.' + feather.config.get('template.suffix'), REG = new RegExp(SUFFIX.replace(/\./, '\\\\.') + '$', 'gi');
+    return id.replace(SUFFIX, '') + SUFFIX;
 }
 
 function addRef(file, type, ref){
@@ -44,6 +44,9 @@ module.exports = function(content, file){
     
     if(matches){
         var id = getId(feather.util.stringQuote(matches[1]).rest);
+        console.log(id);
+
+
 
         if(id[0] == '.'){
             id = Path.join(Path.dirname(file.subpath), id);
