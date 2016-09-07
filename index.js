@@ -41,7 +41,7 @@ module.exports = function(content, file){
         blocks[bid] = bContent;
         return '<!--BLOCK_START#' + bid + '-->' + bContent + '<!--BLOCK_END-->';
     });
-    
+
     if(matches){
         var id = getId(feather.util.stringQuote(matches[1]).rest);
         var info = feather.project.lookup(id);
@@ -53,9 +53,11 @@ module.exports = function(content, file){
             bakFile.setContent(extend.getContent());
             bakFile.optimizer = false;
             bakFile.release = false;
-  
+            
+            extend.addLink(file.subpath);
             feather.compile(bakFile);
-            addDeps(file, extend);            
+            feather.compile(extend);
+            addDeps(file, extend);         
             addRef(file, 'extends', extend.id);
 
             content = bakFile.getContent();
@@ -94,6 +96,7 @@ module.exports = function(content, file){
             if(info.file && info.file.isFile()){
                 var refFile = info.file;
 
+                refFile.addLink(file.subpath);
                 feather.compile(refFile);
                 addDeps(file, refFile);
                 addRef(file, refType, refFile.id);
