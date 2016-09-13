@@ -32,7 +32,6 @@ function addDeps(a, b){
 module.exports = function(content, file){    
     if(!file.isHtmlLike) return content;
 
-
     var blocks = {};
     var matches = content.match(EXTENDS_REG);
 
