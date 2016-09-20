@@ -48,7 +48,7 @@ module.exports = function(content, file){
         if(info.file && info.file.isFile()){
             var extend = info.file;
             //使用临时文件存放，防止用户使用了pd模式，导致注释消失
-            var bakFile = feather.file.wrap(feather.project.getProjectPath() + '/_bak_' + extend.id);
+            var bakFile = feather.file.wrap(feather.project.getProjectPath() + extend.subpathNoExt + '__bak__' + extend.ext);
             bakFile.setContent(extend.getContent());
             bakFile.optimizer = false;
             bakFile.release = false;
@@ -95,12 +95,19 @@ module.exports = function(content, file){
             if(info.file && info.file.isFile()){
                 var refFile = info.file;
 
+                //使用临时文件存放，防止用户使用了pd模式，导致注释消失
+                var bakFile = feather.file.wrap(feather.project.getProjectPath() + refFile.subpathNoExt + '__bak__' + refFile.ext);
+                bakFile.setContent(refFile.getContent());
+                bakFile.optimizer = false;
+                bakFile.release = false;
+                
                 refFile.addLink(file.subpath);
+                feather.compile(bakFile);
                 feather.compile(refFile);
-                addDeps(file, refFile);
+                addDeps(file, refFile);         
                 addRef(file, refType, refFile.id);
 
-                all = refFile.getContent();
+                all = bakFile.getContent();
 
                 if(refType == 'pagelet'){
                     all = all.replace(/\/\*PAGELET_ASYNCS_PLACEHOLDER:\S+?\*\//g, '');
