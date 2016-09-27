@@ -84,7 +84,7 @@ module.exports = function(content, file){
                 id = id.split('#');
 
                 if(id[1]){
-                    pid = id[1];
+                    pid = id[1].replace('__bak__', '');
                 }
                 
                 id = id[0];
