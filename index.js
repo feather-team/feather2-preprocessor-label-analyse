@@ -43,6 +43,11 @@ module.exports = function(content, file){
 
     if(matches){
         var id = getId(feather.util.stringQuote(matches[1]).rest);
+
+        if(id[0] == '.'){
+            id = Path.join(Path.dirname(file.subpath), id);
+        }
+
         var info = feather.project.lookup(id);
 
         if(info.file && info.file.isFile()){
