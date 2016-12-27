@@ -117,9 +117,12 @@ module.exports = function(content, file){
                 if(refType == 'pagelet'){
                     all = all.replace(/\/\*PAGELET_ASYNCS_PLACEHOLDER:\S+?\*\//g, '');
 
-                    if(pid){
-                        return '<div style="display: none" id="' + pid + '">' + all + '</div>';
+                    if(!pid){
+                        pid = 'pagelet';
                     }
+
+                    return '<textarea style="display: none;" id="' + pid + '">' + all.replace(/<\/textarea>/g, '<\\/textarea>') + '</textarea>' +
+                            '<script>(function(){var elem = document.getElementById(\'' + pid + '\');elem.value = elem.value.replace(/<\\\\\\\/textarea>/g, \'</textarea>\');})();</script>';
                 }
             }
         }
