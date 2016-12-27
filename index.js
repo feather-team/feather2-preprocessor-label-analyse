@@ -118,7 +118,7 @@ module.exports = function(content, file){
                     all = all.replace(/\/\*PAGELET_ASYNCS_PLACEHOLDER:\S+?\*\//g, '');
 
                     if(pid){
-                        return '<textarea style="display: none" id="' + pid + '">' + all + '</textarea>';
+                        return '<div style="display: none" id="' + pid + '">' + all + '</div>';
                     }
                 }
             }
