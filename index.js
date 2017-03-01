@@ -4,7 +4,7 @@
 var Path = require('path');
 var EXTENDS_REG = /<extends\s+(\S+)\s*\/?>/;
 var REF_REG = /<!--(?:(?!\[if [^\]]+\]>)[\s\S])*?-->|<(widget|pagelet)\s+(\S+)\s*\/?>/g;
-var BLOCK_REG = /<block\s+(\S+)\s*>([\s\S]*?)<\/block>/g;
+var BLOCK_REG = /<block\s+(\S+?)\s*>([\s\S]*?)<\/block>/g;
 
 function getId(id){
     var SUFFIX = '.' + feather.config.get('template.suffix'), REG = new RegExp(SUFFIX.replace(/\./, '\\\\.') + '$', 'gi');
